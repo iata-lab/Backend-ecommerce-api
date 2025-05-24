@@ -1,7 +1,8 @@
 # Backend-ecoomerce-api
 
 
-Introducción
+## Introducción
+
 En el proyecto de backend se combinará los conocimientos adquiridos en las
 tecnologías node + express, además de mysql/sequelize.
 El alumno tendrá que hacer la presentación y defensa de un diagrama
@@ -9,7 +10,8 @@ explicando las relaciones entre las tablas. El proyecto consistirá en una tiend
 
 
 
-Descripción
+## Descripción
+
 Una vez analizadas las necesidades del proyecto, se espera
 que el alumno desarrolle una API REST que sea capaz de lo siguiente:
 ● Registro de usuarios usando Bcrypt.
@@ -23,7 +25,9 @@ Requisitos imprescindibles del proyecto:
 ● Presentación de README excelente.
 
 
-Tecnologías
+## Tecnologías
+
+
 Para el desarrollo de la API utilizaremos mysql con Sequelize y express.
 El proyecto se subirá a un repositorio público de GitHub y se valorará la
 existencia de ramas, así como diversos commits de calidad legible alta para
@@ -32,7 +36,7 @@ Será requisito indispensable que el repositorio disponga de un Readme
 completo.
 
 
-1.1.Endpoints
+### 1.1.Endpoints
 
 
   Productos
@@ -69,7 +73,7 @@ Implementa validación a la hora de crear un usuario para que se rellene todos l
 Crea 5 productos con un seeder
 
 
-1.2. Extra	
+### 1.2. Extra	
 
 Implementación de roles:
 Crear un rol Admin y que solo los usuarios con ese rol puedan crear, actualizar y eliminar productos.
