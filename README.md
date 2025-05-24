@@ -1,4 +1,4 @@
-# Backend-ecoomerce-api
+# Backend-ecommerce-api
 
 
 ## Introducción
