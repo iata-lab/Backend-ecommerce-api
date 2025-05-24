@@ -4,7 +4,9 @@
   "description": "En el proyecto de backend se combinará los conocimientos adquiridos en las\r tecnologías node + express, además de mysql/sequelize.\r El alumno tendrá que hacer la presentación y defensa de un diagrama\r explicando las relaciones entre las tablas. El proyecto consistirá en una tienda online(e-commerce)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
   },
   "repository": {
     "type": "git",
