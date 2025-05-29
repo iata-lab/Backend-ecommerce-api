@@ -51,7 +51,7 @@ const ProductController = {
 
 	create: (req,res) => {
 		const { name, description, price } = req.body;
-		if(!name || !description || price == null || isNaN(+price))
+		if(!name || !description || price == null || !(price >= 0))
 			return res.status(400).send({message: 'Bad Request'});
 		Product.create(req.body).then(product => {
 			res.status(201).send({
