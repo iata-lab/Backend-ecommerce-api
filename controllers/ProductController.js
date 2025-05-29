@@ -4,7 +4,6 @@ const { Op } = Sequelize;
 const ProductController = {
 	getAll: (req,res) => {
 		let {sort = 'ASC', name, price, minPrice, maxPrice} = req.query;
-		console.log(req.query)
 		if(
 			(sort != 'ASC' && sort != 'DESC') ||
 			(price !== undefined && isNaN(+price)) ||
