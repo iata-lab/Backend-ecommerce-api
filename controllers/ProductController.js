@@ -1,5 +1,4 @@
-const { Product, Sequelize } = require("../models/index");
-const { Op } = Sequelize;
+const { Product, Category, Sequelize: {Op}, sequelize } = require("../models/index");
 
 const ProductController = {
 	getAll: (req,res) => {
@@ -28,6 +27,9 @@ const ProductController = {
 				...(price || minPrice || maxPrice ? {price: priceFilter}:{}),
 				...(name ? {name: nameFilter}:{})
 			},
+			include: [
+				{ model: Category, attributes: { exclude: ['createdAt','updatedAt'] }, through: { attributes: [] }}
+			],
 			order: [
 				['price',sort]
 			]
@@ -41,7 +43,12 @@ const ProductController = {
 		let id = +req.params.id;
 		if(isNaN(id))
 			return res.status(400).send({message:"Bad Request: id must be numeric."});
-		Product.findByPk(id).then(product => {
+		Product.findByPk(id, {
+			attributes: { exclude: ['createdAt','updatedAt'] },
+			include: [
+				{ model: Category, attributes: { exclude: ['createdAt','updatedAt'] }, through: { attributes: [] }}
+			]
+		}).then(product => {
 			if(product) res.status(200).send(product);
 			else res.status(404).send({messsage: "Product Not Found"});
 		}).catch(error => {
@@ -50,10 +57,19 @@ const ProductController = {
 	},
 
 	create: (req,res) => {
-		const { name, description, price } = req.body;
+		const { name, description, price, categories } = req.body;
 		if(!name || !description || price == null || !(price >= 0))
 			return res.status(400).send({message: 'Bad Request'});
-		Product.create(req.body).then(product => {
+		sequelize.transaction(async (t) => {
+			const product = await Product.create(req.body, { transaction: t});
+			if(categories)
+				await product.addCategory(categories, { transaction: t });
+			return await Product.findByPk(product.id, {
+				attributes: { exclude: ['createdAt','updatedAt'] },
+				include: [{model: Category, through: { attributes: [] }, attributes: { exclude: ['createdAt','updatedAt'] }}],
+				transaction: t
+			});
+		}).then(product => {
 			res.status(201).send({
 				message: "Product created successfully",
 				product
@@ -65,10 +81,17 @@ const ProductController = {
 
 	updateById: (req,res) => {
 		let id = +req.params.id;
+		const { categories } = req.body;
 		if(isNaN(id))
 			return res.status(400).send({message: "Bad Request: id must be numeric."});
-		Product.update(req.body, { where: { id }})
-		.then(result => {
+		sequelize.transaction(async (t) => {
+			const result = await Product.update(req.body, { where: { id }, transaction: t });
+			if(categories && result[0]) {
+				const product = await Product.findByPk(id, { transaction: t });
+				await product.setCategories(categories, { transaction: t });
+			}
+			return result;
+		}).then(result => {
 			if(result[0] > 0) res.status(200).send({message: "OK"});
 			else res.status(404).send({message: "Product Not Found"});
 		}).catch(error => {
@@ -83,7 +106,7 @@ const ProductController = {
 		Product.destroy({
 			where: { id }
 		}).then(result => {
-			if(result[0] > 0) res.status(200).send({message:"OK"});
+			if(result > 0) res.status(200).send({message:"OK"});
 			else res.status(404).send({message:"Product Not Found"});
 		}).catch(error => {
 			res.status(500).send({message:"Internal Server Error", error});
