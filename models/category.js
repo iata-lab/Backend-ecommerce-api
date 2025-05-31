@@ -14,7 +14,10 @@ module.exports = (sequelize, DataTypes) => {
       Category.belongsToMany(models.Product,{
         through: models.ProductCategory,
 //	onDelete: 'CASCADE'
-      })
+      });
+      Category.belongsTo(Category, {
+        foreignKey: 'parent_category',
+      });
     }
   }
   Category.init({
@@ -28,6 +31,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     parent_category: {
       type: DataTypes.INTEGER,
+      references: {
+        model: "Categories",
+        key: "id",
+      }
     }
   }, {
     sequelize,
