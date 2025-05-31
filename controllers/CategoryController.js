@@ -29,7 +29,11 @@ module.exports = {
 		let id = +req.params.id;
 		if(isNaN(id))
 			return res.status(400).send({message:"Bad Request: id must be numeric."});
-		Category.findByPk(id).then(category => {
+		Category.findByPk(id, {
+			attributes: {
+				exclude: ['createdAt','updatedAt']
+			}
+		}).then(category => {
 			if(category) res.status(200).send(category);
 			else res.status(404).send({message: "Category Not Found"});
 		}).catch(error => {
