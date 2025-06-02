@@ -1,33 +1,70 @@
-// app.js
-const { express, logger } = require("express");
+const { express, logger, path, morgan } = require("../config/dependencies");
 const cors = require("cors");
-const morgan = require("morgan");
-const errorHandler = require("../middlewares/errorHandler");
-//const routes = require("./routes");
+const cookieParser = require("cookie-parser");
+const errorHandler = require("./middlewares/errorHandler.middleware");
+const i18nMiddleware = require("./middlewares/i18n.middleware");
+const { NotFoundError, BadRequestError } = require("./errors");
+const routes = require("./routes");
+const i18nConfig = require("../config/i18n-config");
 
 const app = express();
 
-// ===== 1. Middlewares iniciales (se ejecutan en cada request) =====
-app.use(cors());
+// ===== 1. Middlewares iniciales =====
 app.use(express.json());
+app.use(cors());
+app.use(cookieParser());
+app.use(i18nMiddleware);
 
-// Logs de solicitudes HTTP
+// Ruta de prueba
+app.get("/", (req, res) => {
+  res.json({
+    message: req.__("welcome"),
+    currentLanguage: req.getLocale(),
+  });
+});
+
+// Ruta para cambiar idioma
+app.post("/change-language", (req, res, next) => {
+  try {
+    const { lang } = req.body;
+
+    if (!i18nConfig.locales.includes(lang)) {
+      throw new BadRequestError("errors.language.invalid", {
+        details: { attempted: lang },
+      });
+    }
+
+    res.cookie("lang", lang, {
+      maxAge: 900000,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    });
+
+    res.json({
+      success: true,
+      message: req.__("language.changed"),
+      newLanguage: lang,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Logs HTTP
 app.use(
   morgan("dev", {
-    stream: { write: (message) => logger.info(message.trim()) },
+    stream: {
+      write: (message) => logger.info(message.trim()),
+    },
   })
 );
 
 // ===== 2. Rutas =====
-app.use("/api", routes); // PONER LAS RUTAS
+app.use("/api", routes);
 
-
-
-
-
-// ===== 3. Middlewares finales (manejo de errores) =====
+// ===== 3. Manejo de errores =====
 app.use((req, res, next) => {
-  next(new NotFoundError("Ruta no encontrada")); // 404
+  next(new NotFoundError("errors.http.not_found")); // 404
 });
 
 app.use(errorHandler);

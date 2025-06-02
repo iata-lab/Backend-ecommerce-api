@@ -1,0 +1,71 @@
+{
+  "auth": {
+    "admin_required": "Administratzaile baimena behar da",
+    "confirmation_required": "Pasahitza berretsi behar da",
+    "signup_success": "Erabiltzailea arrakastaz erregistratu da",
+    "login_success": "Autentifikazioa arrakastatsua izan da",
+    "logout_success": "Saioa behar bezala itxi da"
+  },
+  "errors": {
+    "auth": {
+      "missing_credentials": "Kredentzialak behar dira",
+      "invalid_credentials": "Kredentzial baliogabeak",
+      "missing_token": "Tokena ez da eman",
+      "invalid_token_type": "Token mota baliogabea",
+      "invalid_session": "Saio baliogabea",
+      "expired_session": "Saioa iraungi da",
+      "confirmation_required": "Pasahitza berretsi behar duzu jarraitzeko.",
+      "invalid_password": "Pasahitz okerra"
+    },
+    "http": {
+      "bad_request": "Eskari okerra",
+      "unauthorized": "Baimenik gabe",
+      "forbidden": "Sarbidea debekatuta",
+      "not_found": "Baliabidea ez da aurkitu",
+      "internal_server": "Zerbitzariaren barneko errorea"
+    },
+    "validation": {
+      "required": "Eremu hau beharrezkoa da",
+      "email": "Mesedez, sartu baliozko helbide elektroniko bat",
+      "password": "Pasahitz baliogabea: {details}",
+      "password_length": "Pasahitzak 8 eta 255 karaktere artean izan behar du",
+      "username_length": "Erabiltzaile-izenak 3 eta 50 karaktere artean izan behar du",
+      "username_format": "Letra, zenbaki eta azpimarra (_) bakarrik onartzen dira"
+    },
+    "conflict": "Gatazka (baliabidea badago dagoeneko)",
+    "user": {
+      "email_exists": "Helbide elektronikoa jada erregistratuta dago",
+      "username_exists": "Erabiltzaile-izena ez dago erabilgarri",
+      "not_found": "Erabiltzailea ez da aurkitu",
+      "no_valid_fields": "Eguneratzeko baliozko eremurik ez da eman",
+      "update_failed": "Errorea profila eguneratzean",
+      "name_format": "Izenak testu balioduna izan behar du",
+      "description_format": "Deskribapenak testu balioduna izan behar du",
+      "price_format": "Prezioak zenbaki balioduna izan behar du",
+      "price_positive": "Prezioa ezin da negatiboa izan"
+    },
+    "order": {
+      "not_found": "Eskaria ez da aurkitu",
+      "not_owner": "Ez duzu eskaera hau ikusteko baimenik"
+    },
+    "token": {
+      "invalidation_failed": "Tokenak baliogabetzea huts egin du."
+    },
+    "language": {
+      "invalid": "Hizkuntza ez da onartzen."
+    }
+  },
+  "user": {
+    "updated": "Profila ongi eguneratu da",
+    "deleted": "Kontua arrakastaz ezabatu da"
+  },
+  "order": {
+    "listed_all": "Eskaerak ongi zerrendatu dira.",
+    "listed_user": "Zure eskaerak zerrendatu dira.",
+    "found": "Eskaria aurkitu da."
+  },
+  "language": {
+    "changed": "Hizkuntza ongi aldatu da."
+  },
+  "welcome": "APIra ongi etorri"
+}

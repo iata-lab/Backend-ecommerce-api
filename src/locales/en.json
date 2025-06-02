@@ -1,0 +1,71 @@
+{
+  "auth": {
+    "admin_required": "Admin access required",
+    "confirmation_required": "Password confirmation required",
+    "signup_success": "User successfully registered",
+    "login_success": "Authentication successful",
+    "logout_success": "Session successfully closed"
+  },
+  "errors": {
+    "auth": {
+      "missing_credentials": "Credentials required",
+      "invalid_credentials": "Invalid credentials",
+      "missing_token": "Token not provided",
+      "invalid_token_type": "Invalid token type",
+      "invalid_session": "Invalid session",
+      "expired_session": "Session expired",
+      "confirmation_required": "You must confirm your password to proceed.",
+      "invalid_password": "Incorrect password"
+    },
+    "http": {
+      "bad_request": "Bad request",
+      "unauthorized": "Unauthorized",
+      "forbidden": "Access forbidden",
+      "not_found": "Resource not found",
+      "internal_server": "Internal server error"
+    },
+    "validation": {
+      "required": "This field is required",
+      "email": "Please enter a valid email",
+      "password": "Invalid password: {details}",
+      "password_length": "Password must be between 8 and 255 characters",
+      "username_length": "Username must be between 3 and 50 characters",
+      "username_format": "Only letters, numbers, and underscores (_) are allowed",
+      "name_format": "The name must be a valid string",
+      "description_format": "The description must be a valid string",
+      "price_format": "The price must be a valid number",
+      "price_positive": "The price cannot be negative"
+    },
+    "conflict": "Conflict (resource already exists)",
+    "user": {
+      "email_exists": "Email is already registered",
+      "username_exists": "Username is not available",
+      "not_found": "User not found",
+      "no_valid_fields": "No valid fields provided for update",
+      "update_failed": "Failed to update profile"
+    },
+    "order": {
+      "not_found": "Order not found",
+      "not_owner": "You do not have permission to view this order"
+    },
+    "token": {
+      "invalidation_failed": "Failed to invalidate tokens."
+    },
+    "language": {
+      "invalid": "Unsupported language."
+    }
+  },
+  "user": {
+    "updated": "Profile updated successfully",
+    "deleted": "Account successfully deleted"
+  },
+  "order": {
+    "listed_all": "Orders listed successfully.",
+    "listed_user": "Your orders have been listed.",
+    "found": "Order found."
+  },
+  "language": {
+    "changed": "Language changed successfully."
+  },
+  "welcome": "Welcome to the API"
+}

@@ -1,0 +1,71 @@
+{
+  "auth": {
+    "admin_required": "Acceso restringido a administradores",
+    "confirmation_required": "Confirmación de contraseña requerida",
+    "signup_success": "Usuario registrado exitosamente",
+    "login_success": "Autenticación exitosa",
+    "logout_success": "Sesión cerrada exitosamente"
+  },
+  "errors": {
+    "auth": {
+      "missing_credentials": "Credenciales requeridas",
+      "invalid_credentials": "Credenciales inválidas",
+      "missing_token": "Token no proporcionado",
+      "invalid_token_type": "Tipo de token inválido",
+      "invalid_session": "Sesión inválida",
+      "expired_session": "Sesión expirada",
+      "confirmation_required": "Debes confirmar tu contraseña para continuar.",
+      "invalid_password": "Contraseña incorrecta"
+    },
+    "http": {
+      "bad_request": "Solicitud incorrecta",
+      "unauthorized": "No autorizado",
+      "forbidden": "Acceso prohibido",
+      "not_found": "Recurso no encontrado",
+      "internal_server": "Error interno del servidor"
+    },
+    "validation": {
+      "required": "Este campo es requerido",
+      "email": "Por favor ingresa un email válido",
+      "password": "Contraseña inválida: {details}",
+      "password_length": "La contraseña debe tener entre 8 y 255 caracteres",
+      "username_length": "El nombre de usuario debe tener entre 3 y 50 caracteres",
+      "username_format": "Solo se permiten letras, números y guiones bajos (_)",
+      "name_format": "El nombre debe ser un texto válido",
+      "description_format": "La descripción debe ser un texto válido",
+      "price_format": "El precio debe ser un número válido",
+      "price_positive": "El precio no puede ser negativo"
+    },
+    "conflict": "Conflicto (el recurso ya existe)",
+    "user": {
+      "email_exists": "El email ya está registrado",
+      "username_exists": "El nombre de usuario no está disponible",
+      "not_found": "Usuario no encontrado",
+      "no_valid_fields": "No se proporcionaron campos válidos para actualizar",
+      "update_failed": "Error al actualizar el perfil"
+    },
+    "order": {
+      "not_found": "Orden no encontrada",
+      "not_owner": "No tienes permiso para ver esta orden"
+    },
+    "token": {
+      "invalidation_failed": "No se pudieron invalidar los tokens."
+    },
+    "language": {
+      "invalid": "Idioma no soportado."
+    }
+  },
+  "user": {
+    "updated": "Perfil actualizado correctamente",
+    "deleted": "Cuenta eliminada correctamente"
+  },
+  "order": {
+    "listed_all": "Pedidos listados correctamente.",
+    "listed_user": "Tus pedidos han sido listados.",
+    "found": "Pedido encontrado."
+  },
+  "language": {
+    "changed": "Idioma cambiado correctamente."
+  },
+  "welcome": "Bienvenido a la API"
+}

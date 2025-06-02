@@ -1,87 +1,56 @@
-# Backend-ecommerce-api
+Probar tests:
+Cree un usuario temporal con POST /api/auth/signup.
+
+Haga login con ese usuario para obtener un token.
+
+Use ese token en las peticiones protegidas (como PATCH /api/profile).
 
 
-## Introducción
+npm test
 
-En el proyecto de backend se combinará los conocimientos adquiridos en las
-tecnologías node + express, además de mysql/sequelize.
-El alumno tendrá que hacer la presentación y defensa de un diagrama
-explicando las relaciones entre las tablas. El proyecto consistirá en una tienda online(e-commerce)
+Backend de E-commerce desarrollado usando Node.js con Express, autenticación con JWT, validaciones con Joi, e internacionalización (i18n) en español, inglés y euskera.
 
+Tecnologías usadas:
 
+Node.js + Express — Servidor y routing
+Sequelize + MySQL — ORM y persistencia
+JWT (access & refresh) — Autenticación segura
+Joi — Validaciones robustas con soporte i18n
+i18n — Soporte multilenguaje (es, en, eu)
+Manejo centralizado de errores — AppError con soporte multilingüe
+Multer (opcional) — Para subida de archivos
+dotenv — Configuración por entorno
 
-## Descripción
+Instalación:
 
-Una vez analizadas las necesidades del proyecto, se espera
-que el alumno desarrolle una API REST que sea capaz de lo siguiente:
-● Registro de usuarios usando Bcrypt.
-● Login de usuarios + token + middleware.
-● Que sea capaz de crear un CRUD.
-● Al menos una relación Many to Many y otra One to Many.
-● Utilización de seeders
+git clone ponerRepo
+cd backend-ecommerce-api
+npm install
 
-Requisitos imprescindibles del proyecto:
-● Uso de ramas con git, cuando se termine el proyecto deberán quedar dos ramas la master o main y la develop.
-● Presentación de README excelente.
+Seguridad:
 
+JWT (access y refresh)
+Contraseñas hasheadas con bcrypt
+Verificación por rol (admin opcional)
+Confirmación de contraseña para eliminar cuenta
+Validaciones robustas en todos los inputs
 
-## Tecnologías
+probar conexion (opcional): 
+node src/sync-db.js
 
+Crear BBDD si no existe:
+npx sequelize-cli db:create
 
-Para el desarrollo de la API utilizaremos mysql con Sequelize y express.
-El proyecto se subirá a un repositorio público de GitHub y se valorará la
-existencia de ramas, así como diversos commits de calidad legible alta para
-analizar la evolución del proyecto.
-Será requisito indispensable que el repositorio disponga de un Readme
-completo.
+Inicializar tablas:
+npm sequelize-cli init
 
+Migracion tablas:
+npx sequelize-cli db:migrate
 
-### 1.1.Endpoints
+Usar los seeds!:
+npx sequelize-cli db:seed:all
 
+npm run dev/node src/server.js
 
-  Productos
-CRUD productos
-Endpoint para crear un producto
-Endpoint para actualizar un producto
-Endpoint para eliminar un producto
-El endpoint de traer productos debe mostrarse junto a la categoría o categorías que pertenece
-Endpoint que traiga un producto por su id
-Filtro para buscar producto por nombre
-Filtro para buscar producto por precio
-Filtro que ordene los productos de mayor a menor precio
-Implementa validación a la hora de crear un producto para que se rellene todos los campos y si no se hace que devuelva un mensaje
-Solo podrás crear, actualizar y eliminar productos si estás autenticado.
-
-  Categorías
-CRUD Categorías
-El endpoint para ver todas las categorías junto a los productos que tienen
-Crea un endpoint que devuelva una categoría por id
-Filtro para buscar categoría por nombre
-
-  Pedidos
-Crea un endpoint para ver los pedidos junto a los productos que tienen 
-Crea un endpoint para crear pedidos
-
- Usuarios
-Endpoint para registrar un usuario utilizando bcrypt
-Endpoint para login(utilizando bcrypt +JWT)
-Endpoint que nos traiga la información del usuario conectado junto a los pedidos que tiene y los productos que contiene cada pedido
-Endpoint para el logout
-Implementa validación a la hora de crear un usuario para que se rellene todos los campos y si no se hace que devuelva un mensaje
-
- Seeders
-Crea 5 productos con un seeder
-
-
-### 1.2. Extra	
-
-Implementación de roles:
-Crear un rol Admin y que solo los usuarios con ese rol puedan crear, actualizar y eliminar productos.
-Investiga que es el middleware multer e implementalo para poder adjuntar imágenes al crear o actualizar productos.
-Reviews
-CRUD reviews
-El endpoint de traer reviews debe mostrarlas junto al usuario que hizo esa review
-Actualizar el endpoint de traer todos productos y que ahora muestre los productos junto a sus categorías y sus reviews
-Actualizar el endpoint de traer producto por id y que ahora muestre los productos junto a sus categorías y sus reviews
 
 
