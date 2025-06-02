@@ -1,7 +1,6 @@
 const { Order, OrderProduct, Product } = require("../config/dependencies");
 const { NotFoundError, ForbiddenError } = require("../errors");
 
-// Admin: obtener todos los pedidos
 exports.getAllOrders = async (req, res, next) => {
   try {
     if (!req.user.isAdmin()) {
@@ -19,7 +18,6 @@ exports.getAllOrders = async (req, res, next) => {
   }
 };
 
-// Admin: obtener un pedido por ID
 exports.getOrderById = async (req, res, next) => {
   try {
     if (req.user.role !== "admin") {
@@ -43,7 +41,6 @@ exports.getOrderById = async (req, res, next) => {
   }
 };
 
-// Usuario: obtener todos sus pedidos
 exports.getAllUserOrders = async (req, res, next) => {
   try {
     const orders = await Order.findAll({
@@ -67,7 +64,6 @@ exports.getAllUserOrders = async (req, res, next) => {
   }
 };
 
-// Usuario: obtener un pedido suyo por ID
 exports.getUserOrderById = async (req, res, next) => {
   try {
     const order = await Order.findByPk(req.params.id, {
