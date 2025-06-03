@@ -1,8 +1,8 @@
-const { Product, Sequelize } = require("../models");
+const { Product, Category, Sequelize } = require("../models");
 const { Op } = Sequelize;
 const { BadRequestError, NotFoundError } = require("../errors");
 
-const ProductController = {
+module.exports = {
   getAll: async (req, res, next) => {
     try {
       let { sort = "ASC", name, price, minPrice, maxPrice } = req.query;
@@ -32,6 +32,9 @@ const ProductController = {
           ...(price || minPrice || maxPrice ? { price: priceFilter } : {}),
           ...(name ? { name: nameFilter } : {}),
         },
+        include: [
+          { model: Category, attributes: { exclude: ['createdAt','updatedAt'] }, through: { attributes: [] }}
+        ],
         order: [["price", sort]],
       });
 
@@ -52,7 +55,12 @@ const ProductController = {
         throw new BadRequestError("errors.product.invalid_id");
       }
 
-      const product = await Product.findByPk(id);
+      const product = await Product.findByPk(id, {
+        attributes: { exclude: ['createdAt','updatedAt'] },
+        include: [
+          { model: Category, attributes: { exclude: ['createdAt','updatedAt'] }, through: { attributes: [] }}
+        ]
+      });
       if (!product) {
         throw new NotFoundError("errors.product.not_found", {
           details: { productId: id },
@@ -71,7 +79,16 @@ const ProductController = {
 
   create: async (req, res, next) => {
     try {
-      const product = await Product.create(req.body);
+      const product = await sequelize.transaction(async (t) => {
+        const product = await Product.create(req.body, { transaction: t});
+        if(req.body.categories)
+          await product.addCategory(categories, { transaction: t });
+        return await Product.findByPk(product.id, {
+          attributes: { exclude: ['createdAt','updatedAt'] },
+          include: [{model: Category, through: { attributes: [] }, attributes: { exclude: ['createdAt','updatedAt'] }}],
+          transaction: t
+        });
+      });
 
       res.status(201).json({
         success: true,
@@ -90,7 +107,14 @@ const ProductController = {
         throw new BadRequestError("errors.product.invalid_id");
       }
 
-      const [affectedCount] = await Product.update(req.body, { where: { id } });
+      const [affectedCount] = await sequelize.transaction(async (t) => {
+        const result = await Product.update(req.body, { where: { id }, transaction: t });
+        if(categories && result[0]) {
+          const product = await Product.findByPk(id, { transaction: t });
+          await product.setCategories(categories, { transaction: t });
+        }
+        return result;
+      });
 
       if (affectedCount === 0) {
         throw new NotFoundError("errors.product.not_found", {

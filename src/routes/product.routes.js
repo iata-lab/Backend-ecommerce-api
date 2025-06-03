@@ -17,17 +17,12 @@ const {
 const { authenticate } = require("../middlewares/auth.middleware");
 
 // Rutas públicas
-router.get("/products", getAll);
-router.get("/products/:id", getById);
+router.get("/", getAll);
+router.get("/:id", getById);
 
 // Rutas protegidas
-router.post("/products", authenticate, validate(createProductSchema), create);
-router.put(
-  "/products/:id",
-  authenticate,
-  validate(updateProductSchema),
-  updateById
-);
-router.delete("/products/:id", authenticate, deleteById);
+router.post("/", authenticate, validate(createProductSchema), create);
+router.put("/:id", authenticate, validate(updateProductSchema), updateById);
+router.delete("/:id", authenticate, deleteById);
 
 module.exports = router;

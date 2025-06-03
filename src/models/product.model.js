@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          notEmpty: { msg: "errors.validation.required" },
+          notEmpty: { msg: "err)ors.validation.required" },
           len: {
             args: [1, 500],
             msg: "errors.validation.description_length",
@@ -49,6 +49,9 @@ module.exports = (sequelize, DataTypes) => {
       through: models.OrderProduct,
       foreignKey: "productId",
     });
+    Product.belongsToMany(models.Category,{
+        through: models.ProductCategory
+      })
   };
 
   return Product;
