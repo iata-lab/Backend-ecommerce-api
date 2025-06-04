@@ -1,4 +1,4 @@
-const { express, logger, morgan } = require("../config/dependencies");
+const { express, logger, morgan } = require("./src/config/dependencies");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const errorHandler = require("./src/middlewares/");

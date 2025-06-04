@@ -1,5 +1,6 @@
 const { createLogger, format, transports } = require("winston");
-const { path } = require("../config/dependencies");
+const { InternalServerError } = require("../errors");
+const { path } = require("./src/config/dependencies");
 const { combine, timestamp, printf, colorize } = format;
 
 const logFormat = printf(({ level, message, timestamp, stack }) => {
@@ -65,15 +66,12 @@ const prodLogger = createLogger({
 
 process.on("unhandledRejection", (reason) => {
   const logger = process.env.NODE_ENV === "production" ? prodLogger : devLogger;
-  logger.error("Unhandled Rejection:", {
-    message: reason instanceof Error ? reason.message : reason,
-    stack: reason instanceof Error ? reason.stack : undefined,
-  });
+  throw new InternalServerError("errors.auth.internal_server");
 });
 
 process.on("uncaughtException", (error) => {
   const logger = process.env.NODE_ENV === "production" ? prodLogger : devLogger;
-  logger.error("Uncaught Exception:", error);
+  throw new InternalServerError("errors.auth.internal_server");
   process.exit(1);
 });
 
