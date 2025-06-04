@@ -64,9 +64,10 @@ module.exports = (sequelize, DataTypes) => {
             const product = await sequelize.models.Product.findByPk(
               orderProduct.productId
             );
-            if (product) {
-              orderProduct.unitPrice = product.price;
+            if (!product || !product.price) {
+              throw new Error("errors.order.missing_product_price");
             }
+            orderProduct.unitPrice = product.price;
           }
         },
       },
@@ -76,11 +77,13 @@ module.exports = (sequelize, DataTypes) => {
   OrderProduct.associate = (models) => {
     OrderProduct.belongsTo(models.Order, {
       foreignKey: "orderId",
+      as: "order",
       onDelete: "CASCADE",
     });
 
     OrderProduct.belongsTo(models.Product, {
       foreignKey: "productId",
+      as: "product",
       onDelete: "RESTRICT",
     });
   };

@@ -1,5 +1,5 @@
-const { Order, OrderProduct, Product } = require("../config/dependencies");
-const { NotFoundError, ForbiddenError } = require("../errors");
+const { Order, OrderProduct, Product } = require("../config/models");
+const { NotFoundError, ForbiddenError } = require("../../errors");
 
 exports.getAllOrders = async (req, res, next) => {
   try {
@@ -7,7 +7,22 @@ exports.getAllOrders = async (req, res, next) => {
       throw new ForbiddenError("errors.auth.admin_required");
     }
 
-    const orders = await Order.findAll();
+    const orders = await Order.findAll({
+      where: { userId: req.user.id },
+      include: [
+        {
+          model: OrderProduct,
+          as: "items",
+          attributes: ["id", "price", "quantity"],
+          include: [
+            {
+              model: Product,
+              attributes: ["id", "name"],
+            },
+          ],
+        },
+      ],
+    });
     res.json({
       success: true,
       message: req.__("order.listed_all"),
@@ -24,7 +39,21 @@ exports.getOrderById = async (req, res, next) => {
       throw new NotFoundError("errors.order.not_found");
     }
 
-    const order = await Order.findByPk(req.params.id);
+    const order = await Order.findByPk(req.params.id, {
+      include: [
+        {
+          model: OrderProduct,
+          as: "items",
+          attributes: ["id", "price", "quantity"],
+          include: [
+            {
+              model: Product,
+              attributes: ["id", "name"],
+            },
+          ],
+        },
+      ],
+    });
     if (!order) {
       throw new NotFoundError("errors.order.not_found", {
         details: { orderId: req.params.id },
@@ -80,10 +109,6 @@ exports.getUserOrderById = async (req, res, next) => {
       throw new NotFoundError("errors.order.not_found", {
         details: { orderId: req.params.id },
       });
-    }
-
-    if (order.userId !== req.user.id) {
-      throw new NotFoundError("errors.order.not_owner");
     }
 
     res.json({

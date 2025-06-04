@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          notEmpty: { msg: "err)ors.validation.required" },
+          notEmpty: { msg: "errors.validation.required" },
           len: {
             args: [1, 500],
             msg: "errors.validation.description_length",

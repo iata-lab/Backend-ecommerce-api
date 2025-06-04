@@ -175,12 +175,9 @@ module.exports = (sequelize, DataTypes) => {
     User.hasMany(models.Order, {
       foreignKey: { name: "userId", allowNull: false },
     });
-    User.hasMany(models.OrderProduct, {
+    /*User.hasMany(models.RefreshToken, {
       foreignKey: "userId",
-    });
-    User.hasMany(models.RefreshToken, {
-      foreignKey: "userId",
-    });
+    });*/
   };
 
   return User;

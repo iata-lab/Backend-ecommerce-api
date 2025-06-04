@@ -17,7 +17,7 @@ exports.authenticate = async (req, res, next) => {
     }
 
     req.user = {
-      userId: decoded.userId,
+      id: decoded.id,
       userName: decoded.userName,
       role: decoded.role,
     };
@@ -29,7 +29,7 @@ exports.authenticate = async (req, res, next) => {
 };
 
 // Middleware para roles
-exports.authorize = (roles = []) => {
+exports.authorize = (...roles) => {
   return (req, res, next) => {
     try {
       if (!roles.includes(req.user.role)) {

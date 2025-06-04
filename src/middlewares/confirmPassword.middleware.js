@@ -13,7 +13,7 @@ const requirePasswordConfirmation = async (req, res, next) => {
   }
 
   try {
-    const user = await User.findByPk(req.user.userId);
+    const user = await User.findByPk(req.user.id);
     if (!user) {
       throw new NotFoundError("errors.user.not_found");
     }

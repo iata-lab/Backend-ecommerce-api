@@ -10,7 +10,7 @@ const { InternalServerError, UnauthorizedError } = require("../errors/index");
 
 async function generateTokens(user) {
   const payload = {
-    userId: user.id,
+    id: user.id,
     userName: user.userName,
     role: user.role,
   };

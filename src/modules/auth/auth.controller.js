@@ -1,13 +1,13 @@
 const { User } = require("../models/user.model");
-const { bcrypt } = require("../config/dependencies");
+const { bcrypt } = require("../../config/dependencies");
 const {
   UnauthorizedError,
   BadRequestError,
   ForbiddenError,
-} = require("../errors");
+} = require("../../errors");
 
-const { generateTokens, verifyRefreshToken } = require("../utils/jwt-utils");
-const { hashToken } = require("../utils/token.utils");
+const { generateTokens, verifyRefreshToken } = require("../../utils/jwt-utils");
+const { hashToken } = require("../../utils/token.utils");
 
 exports.signUp = async (req, res, next) => {
   try {
@@ -21,7 +21,7 @@ exports.signUp = async (req, res, next) => {
     res.status(201).json({
       success: true,
       message: req.__("auth.signup_success"),
-      token: accessToken,
+      accessToken,
       refreshToken,
     });
   } catch (error) {
@@ -49,7 +49,7 @@ exports.login = async (req, res, next) => {
     res.json({
       success: true,
       message: req.__("auth.login_success"),
-      token: accessToken,
+      accessToken,
       refreshToken,
     });
   } catch (error) {
@@ -75,40 +75,40 @@ exports.logout = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
 
-  exports.refreshToken = async (req, res, next) => {
-    try {
-      const { refreshToken } = req.body;
+exports.refreshToken = async (req, res, next) => {
+  try {
+    const { refreshToken } = req.body;
 
-      if (!refreshToken) {
-        throw new BadRequestError("errors.auth.missing_token");
-      }
-
-      const decoded = verifyRefreshToken(refreshToken);
-      const hashedToken = hashToken(refreshToken);
-
-      const user = await User.findOne({
-        where: {
-          id: decoded.userId,
-          refreshToken: hashedToken,
-        },
-      });
-
-      if (!user) {
-        throw new ForbiddenError("errors.auth.invalid_session");
-      }
-
-      const { accessToken: newAccessToken } = await generateTokens(user);
-
-      res.json({
-        success: true,
-        token: newAccessToken,
-      });
-    } catch (error) {
-      if (error.name === "TokenExpiredError") {
-        error = new UnauthorizedError("errors.auth.expired_session");
-      }
-      next(error);
+    if (!refreshToken) {
+      throw new BadRequestError("errors.auth.missing_token");
     }
-  };
+
+    const decoded = verifyRefreshToken(refreshToken);
+    const hashedToken = hashToken(refreshToken);
+
+    const user = await User.findOne({
+      where: {
+        id: decoded.userId,
+        refreshToken: hashedToken,
+      },
+    });
+
+    if (!user) {
+      throw new ForbiddenError("errors.auth.invalid_session");
+    }
+
+    const { accessToken: newAccessToken } = await generateTokens(user);
+
+    res.json({
+      success: true,
+      accessToken: newAccessToken,
+    });
+  } catch (error) {
+    if (error.name === "TokenExpiredError") {
+      error = new UnauthorizedError("errors.auth.expired_session");
+    }
+    next(error);
+  }
 };

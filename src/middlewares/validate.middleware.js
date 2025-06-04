@@ -3,12 +3,19 @@ const { BadRequestError } = require("../errors/index");
 module.exports =
   (schema, property = "body") =>
   (req, res, next) => {
-    const { error } = schema.validate(req[property], { abortEarly: false });
+    const { error, value } = schema.validate(req[property], {
+      abortEarly: false,
+      stripUnknown: true,
+    });
 
     if (error) {
-      const details = error.details.map((d) => d.message);
+      const details = error.details.map((d) => ({
+        message: d.message,
+        path: d.path,
+      }));
       return next(new BadRequestError("errors.validation.failed", { details }));
     }
 
+    req[property] = value;
     next();
   };

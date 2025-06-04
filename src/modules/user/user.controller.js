@@ -105,14 +105,14 @@ exports.deleteProfile = async (req, res, next) => {
       throw new ForbiddenError("errors.auth.confirmation_required");
     }
 
-    const user = await User.findByPk(req.user.userId, {
+    const user = await User.findByPk(req.user.id, {
       transaction,
       lock: transaction.LOCK.UPDATE,
     });
 
     if (!user) {
       throw new NotFoundError("errors.user.not_found", {
-        details: { userId: req.user.userId },
+        details: { userId: req.user.id },
       });
     }
 

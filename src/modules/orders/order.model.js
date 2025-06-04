@@ -1,4 +1,4 @@
-const { ValidationError } = require("../errors");
+const { ValidationError } = require("../../errors");
 
 module.exports = (sequelize, DataTypes) => {
   const statusEnum = [
@@ -90,14 +90,13 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "userId",
       onDelete: "RESTRICT",
     });
-
     Order.hasMany(models.OrderProduct, {
       foreignKey: "orderId",
       as: "items",
     });
-
     Order.belongsToMany(models.Product, {
       through: models.OrderProduct,
+      as: "products",
     });
   };
 

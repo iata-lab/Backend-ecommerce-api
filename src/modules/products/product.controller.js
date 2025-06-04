@@ -1,6 +1,10 @@
-const { Product, Category, Sequelize } = require("../models");
-const { Op } = Sequelize;
-const { BadRequestError, NotFoundError } = require("../errors");
+const {
+  Product,
+  Category,
+  Sequelize: { Op },
+  sequelize,
+} = require("../../models");
+const { BadRequestError, NotFoundError } = require("../../errors");
 
 module.exports = {
   getAll: async (req, res, next) => {
@@ -33,7 +37,11 @@ module.exports = {
           ...(name ? { name: nameFilter } : {}),
         },
         include: [
-          { model: Category, attributes: { exclude: ['createdAt','updatedAt'] }, through: { attributes: [] }}
+          {
+            model: Category,
+            attributes: { exclude: ["createdAt", "updatedAt"] },
+            through: { attributes: [] },
+          },
         ],
         order: [["price", sort]],
       });
@@ -56,10 +64,14 @@ module.exports = {
       }
 
       const product = await Product.findByPk(id, {
-        attributes: { exclude: ['createdAt','updatedAt'] },
+        attributes: { exclude: ["createdAt", "updatedAt"] },
         include: [
-          { model: Category, attributes: { exclude: ['createdAt','updatedAt'] }, through: { attributes: [] }}
-        ]
+          {
+            model: Category,
+            attributes: { exclude: ["createdAt", "updatedAt"] },
+            through: { attributes: [] },
+          },
+        ],
       });
       if (!product) {
         throw new NotFoundError("errors.product.not_found", {
@@ -78,79 +90,88 @@ module.exports = {
   },
 
   create: async (req, res, next) => {
+    const { categories, ...productData } = req.body;
+    const transaction = await sequelize.transaction();
+
     try {
-      const product = await sequelize.transaction(async (t) => {
-        const product = await Product.create(req.body, { transaction: t});
-        if(req.body.categories)
-          await product.addCategory(categories, { transaction: t });
-        return await Product.findByPk(product.id, {
-          attributes: { exclude: ['createdAt','updatedAt'] },
-          include: [{model: Category, through: { attributes: [] }, attributes: { exclude: ['createdAt','updatedAt'] }}],
-          transaction: t
-        });
+      productData.userId = req.user.id;
+      const product = await Product.create(productData, { transaction });
+
+      if (categories && Array.isArray(categories)) {
+        await product.setCategories(categories, { transaction });
+      }
+      const createdProduct = await Product.findByPk(product.id, {
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+        include: [
+          {
+            model: Category,
+            attributes: { exclude: ["createdAt", "updatedAt"] },
+            through: { attributes: [] },
+          },
+        ],
+        transaction,
       });
+
+      await transaction.commit();
 
       res.status(201).json({
         success: true,
         message: req.__("product.created"),
-        data: product,
+        data: createdProduct,
       });
     } catch (error) {
+      await transaction.rollback();
       next(error);
     }
   },
 
   updateById: async (req, res, next) => {
+    const { product } = req;
+    const { categories, ...updateData } = req.body;
+
+    const transaction = await sequelize.transaction();
+
     try {
-      const id = +req.params.id;
-      if (isNaN(id)) {
-        throw new BadRequestError("errors.product.invalid_id");
+      await product.update(updateData, { transaction });
+
+      if (categories && Array.isArray(categories)) {
+        await product.setCategories(categories, { transaction });
       }
 
-      const [affectedCount] = await sequelize.transaction(async (t) => {
-        const result = await Product.update(req.body, { where: { id }, transaction: t });
-        if(categories && result[0]) {
-          const product = await Product.findByPk(id, { transaction: t });
-          await product.setCategories(categories, { transaction: t });
-        }
-        return result;
-      });
-
-      if (affectedCount === 0) {
-        throw new NotFoundError("errors.product.not_found", {
-          details: { productId: id },
-        });
-      }
+      await transaction.commit();
 
       res.json({
         success: true,
         message: req.__("product.updated"),
+        data: product, // opcional: devolver producto actualizado
       });
     } catch (error) {
+      await transaction.rollback();
       next(error);
     }
   },
 
   deleteById: async (req, res, next) => {
+    const { product } = req;
+    const transaction = await sequelize.transaction();
+
     try {
-      const id = +req.params.id;
-      if (isNaN(id)) {
+      if (isNaN(product.id)) {
         throw new BadRequestError("errors.product.invalid_id");
       }
 
-      const affectedCount = await Product.destroy({ where: { id } });
+      await product.setCategories([], { transaction });
 
-      if (affectedCount === 0) {
-        throw new NotFoundError("errors.product.not_found", {
-          details: { productId: id },
-        });
-      }
+      await product.destroy({ transaction });
+
+      await transaction.commit();
 
       res.json({
         success: true,
         message: req.__("product.deleted"),
       });
     } catch (error) {
+      await transaction.rollback();
       next(error);
     }
   },

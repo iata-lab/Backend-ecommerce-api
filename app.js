@@ -1,10 +1,10 @@
-const { express, logger, path, morgan } = require("../config/dependencies");
+const { express, logger, morgan } = require("../config/dependencies");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const errorHandler = require("./middlewares/errorHandler.middleware");
-const i18nMiddleware = require("./middlewares/i18n.middleware");
-const { NotFoundError, BadRequestError } = require("./errors");
-const routes = require("./routes");
+const errorHandler = require("./src/middlewares/");
+const i18nMiddleware = require("./src/middlewares/i18n.middleware");
+const { NotFoundError, BadRequestError } = require("./src/errors");
+const routes = require("./src/app.routes");
 const i18nConfig = require("../config/i18n-config");
 
 const app = express();

@@ -14,8 +14,7 @@ const env = process.env.NODE_ENV || "development";
 const config = configJSON[env];
 
 module.exports = {
-  // Core
-  fs,
+  fs: () => require("fs"),
   path,
   jwt,
   bcrypt,
@@ -25,11 +24,9 @@ module.exports = {
   config,
   logger,
 
-  // Express
   express: require("express"),
   morgan: require("morgan"),
 
-  // JWT config
   JWT_SECRET: process.env.JWT_SECRET || "carambolaPerez",
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || "24h",
   REFRESH_SECRET: process.env.REFRESH_SECRET || "perezolaCarambo",
