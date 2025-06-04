@@ -1,4 +1,4 @@
-const { bcrypt } = require("../config/dependencies");
+const bcrypt = require("bcryptjs");
 const { PasswordValidationError } = require("../errors");
 
 module.exports = {

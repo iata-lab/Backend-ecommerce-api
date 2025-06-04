@@ -1,4 +1,4 @@
-const { BadRequestError } = require("../errors/index");
+const { BadRequestError } = require("../errors");
 
 module.exports =
   (schema, property = "body") =>

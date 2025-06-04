@@ -1,4 +1,7 @@
-const { Order, OrderProduct, Product } = require("../config/models");
+const Order = require("../orders/order.model");
+const Product = require("../products/product.model");
+const OrderProduct = require("../orders/orderProduct.model");
+
 const { NotFoundError, ForbiddenError } = require("../../errors");
 
 exports.getAllOrders = async (req, res, next) => {

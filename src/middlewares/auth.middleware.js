@@ -1,4 +1,5 @@
-const { secret, jwt } = require("../config/jwt.config.js");
+const secret = process.env.JWT_SECRET || "carambolaPerez";
+const jwt = require("jsonwebtoken");
 const { ForbiddenError, UnauthorizedError } = require("../errors/index.js");
 
 exports.authenticate = async (req, res, next) => {
@@ -20,6 +21,11 @@ exports.authenticate = async (req, res, next) => {
       id: decoded.id,
       userName: decoded.userName,
       role: decoded.role,
+      isAdmin() {
+        return (
+          typeof this.role === "string" && this.role.toLowerCase() === "admin"
+        );
+      },
     };
 
     next();

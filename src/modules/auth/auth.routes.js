@@ -1,9 +1,9 @@
-const { Router } = require("../../config/dependencies");
-const router = Router();
+const express = require("express");
+const router = express.Router();
 
 const controller = require("./auth.controller");
 const validate = require("../../middlewares/validate.middleware");
-const authenticate = require("../../middlewares/auth.middleware");
+const { authenticate } = require("../../middlewares/auth.middleware");
 const {
   signupSchema,
   loginSchema,

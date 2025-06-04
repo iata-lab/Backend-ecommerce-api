@@ -1,4 +1,4 @@
-const { express } = require("../../config/dependencies");
+const express = require("express");
 const router = express.Router();
 
 const controller = require("./category.controller");

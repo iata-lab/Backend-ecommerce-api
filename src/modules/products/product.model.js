@@ -1,6 +1,7 @@
 "use strict";
+const { DataTypes, Model } = require("sequelize");
 
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize) => {
   const Product = sequelize.define(
     "Product",
     {
@@ -49,9 +50,9 @@ module.exports = (sequelize, DataTypes) => {
       through: models.OrderProduct,
       foreignKey: "productId",
     });
-    Product.belongsToMany(models.Category,{
-        through: models.ProductCategory
-      })
+    Product.belongsToMany(models.Category, {
+      through: models.ProductCategory,
+    });
   };
 
   return Product;

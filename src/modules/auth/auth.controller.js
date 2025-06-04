@@ -1,4 +1,4 @@
-const { User } = require("../models/user.model");
+const User = require("../users/user.model");
 const { bcrypt } = require("../../config/dependencies");
 const {
   UnauthorizedError,

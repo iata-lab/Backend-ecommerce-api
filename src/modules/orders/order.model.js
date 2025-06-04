@@ -1,6 +1,7 @@
+const { DataTypes, Model } = require("sequelize");
 const { ValidationError } = require("../../errors");
 
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize) => {
   const statusEnum = [
     "pending",
     "processing",

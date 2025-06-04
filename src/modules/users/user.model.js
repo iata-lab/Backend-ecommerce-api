@@ -1,12 +1,13 @@
+const { DataTypes, Model } = require("sequelize");
 const {
   validatePasswordStrength,
   hashPassword,
-} = require("../utils/passwordUtils");
-const { ValidationError } = require("../errors/index");
-const { Op } = require("sequelize");
-const { bcrypt } = require("../config/dependencies");
+} = require("../../utils/passwordUtils");
+const ValidationError = require("../../errors");
+const Op = require("sequelize");
+const bcrypt = require("../../config/dependencies");
 
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize) => {
   const User = sequelize.define(
     "User",
     {

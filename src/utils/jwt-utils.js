@@ -1,12 +1,12 @@
-const { jwt } = require("../config/dependencies");
-const { User } = require("../models/user.model");
+const jwt = require("jsonwebtoken");
+const User = require("../modules/users/user.model");
 const {
   JWT_SECRET,
   JWT_EXPIRES_IN,
   REFRESH_SECRET,
   REFRESH_EXPIRES_IN,
 } = require("../config/jwt.config");
-const { InternalServerError, UnauthorizedError } = require("../errors/index");
+const { InternalServerError, UnauthorizedError } = require("../errors");
 
 async function generateTokens(user) {
   const payload = {

@@ -1,4 +1,5 @@
-const { User, bcrypt } = require("../config/dependencies");
+const User = require("../modules/users/user.model");
+const bcrypt = require("bcryptjs");
 const {
   BadRequestError,
   NotFoundError,
@@ -30,6 +31,4 @@ const requirePasswordConfirmation = async (req, res, next) => {
   }
 };
 
-module.exports = {
-  requirePasswordConfirmation,
-};
+module.exports = requirePasswordConfirmation;

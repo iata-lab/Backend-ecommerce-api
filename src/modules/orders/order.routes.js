@@ -1,21 +1,24 @@
-const { express } = require("../config/dependencies");
+const express = require("express");
+console.log("typeof express:", typeof express);
+console.log("express keys:", Object.keys(express));
 const router = express.Router();
 
-const controller = require("../controllers/order.controller");
-const {
-  authenticate,
-  authorize,
-} = require("../../middlewares/auth.middleware");
+const controller = require("./order.controller");
+console.log("controller keys:", Object.keys(controller));
+console.log("controller.getAllOrders:", controller.getAllOrders);
+console.log("controller =", controller);
+
+const validate = require("../../middlewares/validate.middleware");
+const { orderIdParamSchema } = require("./order.validation");
+
+const { authenticate } = require("../../middlewares/auth.middleware");
 const { requireAdmin } = require("../../middlewares/role.middleware");
+console.log("typeof authenticate:", typeof authenticate);
+console.log("typeof requireAdmin:", typeof requireAdmin);
+console.log("typeof getAllOrders:", typeof controller.getAllOrders);
 
 // Admin
-router.get(
-  "/orders",
-  authenticate,
-  requireAdmin,
-  validate(orderIdParamSchema, "params"),
-  controller.getAllOrders
-);
+router.get("/orders", authenticate, requireAdmin, controller.getAllOrders);
 router.get("/order/:id", authenticate, requireAdmin, controller.getOrderById);
 
 // Usuario loggeado

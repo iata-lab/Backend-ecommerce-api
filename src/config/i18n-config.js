@@ -1,4 +1,4 @@
-const { path } = require("../config/dependencies");
+const path = require("path");
 
 module.exports = {
   locales: ["en", "es", "eu"],

@@ -1,28 +1,28 @@
-const path = require("path");
+/*const path = require("path");*/
 const dotenv = require("dotenv");
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const { Sequelize, Op } = require("sequelize");
+const { Sequelize, Op, DataTypes } = require("sequelize");
 
 dotenv.config();
 
 const configJSON = require("./config.json");
-const logger = require("./logger");
+/*const logger = require("./logger");*/
 
 const env = process.env.NODE_ENV || "development";
 const config = configJSON[env];
 
 module.exports = {
   fs: () => require("fs"),
-  path,
+  /* path,*/
   jwt,
   bcrypt,
   Sequelize,
   DataTypes,
   Op,
   config,
-  logger,
+  /*logger,*/
 
   express: require("express"),
   morgan: require("morgan"),

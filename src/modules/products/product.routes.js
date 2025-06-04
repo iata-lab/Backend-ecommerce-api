@@ -1,9 +1,11 @@
-const { express } = require("../../config/dependencies");
+const express = require("express");
 const router = express.Router();
 
 const controller = require("./product.controller");
 const { authenticate } = require("../../middlewares/auth.middleware");
-const requireOwnershipOrAdmin = require("../../middlewares/requireOwnershipOrAdmin.middleware");
+const {
+  requireOwnershipOrAdmin,
+} = require("../../middlewares/ownerOrAdmin.middleware");
 const validate = require("../../middlewares/validate.middleware");
 const {
   createProductSchema,
@@ -32,7 +34,7 @@ router.delete(
   "/:id",
   authenticate,
   requireOwnershipOrAdmin,
-  controller.deleteByid
+  controller.deleteById
 );
 
 module.exports = router;

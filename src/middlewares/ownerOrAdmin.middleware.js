@@ -1,7 +1,7 @@
-const { Product } = require("../config/models");
+const Product = require("../modules/products/product.model");
 const { NotFoundError, ForbiddenError } = require("../errors");
 
-module.exports = async (req, res, next) => {
+exports.requireOwnershipOrAdmin = async (req, res, next) => {
   try {
     const product = await Product.findByPk(req.params.id);
     if (!product) {

@@ -1,6 +1,6 @@
 const { createLogger, format, transports } = require("winston");
 const { InternalServerError } = require("../errors");
-const { path } = require("./src/config/dependencies");
+const { path } = require("path");
 const { combine, timestamp, printf, colorize } = format;
 
 const logFormat = printf(({ level, message, timestamp, stack }) => {

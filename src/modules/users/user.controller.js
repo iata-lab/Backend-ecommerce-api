@@ -1,17 +1,16 @@
-const { db } = require("../models");
-const sequelize = db.sequelize;
-const {
-  User,
-  logger,
-  bcrypt,
-  RefreshToken,
-} = require("../config/dependencies");
+const { sequelize } = require("../../config/db.config");
+/*const RefreshToken = require("../auth/auth.controller");*/
+const bcrypt = require("bcryptjs");
+const { models } = require("../../config/db.config");
+const { RefreshToken, User } = models;
+/*const User = models.User;*/
+
 const {
   ForbiddenError,
   NotFoundError,
   BadRequestError,
   InternalServerError,
-} = require("../errors");
+} = require("../../errors");
 
 const SAFE_USER_ATTRIBUTES = [
   "id",
@@ -117,7 +116,7 @@ exports.deleteProfile = async (req, res, next) => {
     }
 
     await user.destroy({ transaction });
-    await invalidateUserTokens(user.id, transaction);
+    await user.update({ refreshToken: null }, { transaction });
 
     await transaction.commit();
 
@@ -142,10 +141,10 @@ exports.getAllUsers = async (req, res, next) => {
       order: [["createdAt", "DESC"]],
     });
 
-    logger.info(`Admin ${req.user.id} accessed user list`, {
+    /*logger.info(`Admin ${req.user.id} accessed user list`, {
       action: "user_list_access",
       userId: req.user.id,
-    });
+    });*/
 
     res.json({
       success: true,
@@ -155,23 +154,3 @@ exports.getAllUsers = async (req, res, next) => {
     next(error);
   }
 };
-
-async function invalidateUserTokens(userId, transaction) {
-  try {
-    const [affectedRows] = await RefreshToken.update(
-      { isRevoked: true },
-      {
-        where: { userId },
-        transaction,
-      }
-    );
-
-    if (affectedRows === 0) {
-      throw new InternalServerError("errors.token.invalidation_failed", {
-        details: { userId },
-      });
-    }
-  } catch (error) {
-    throw error;
-  }
-}
