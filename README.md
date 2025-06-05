@@ -1,87 +1,99 @@
 # Backend-ecommerce-api
 
+Backend de una tienda online desarrollado con **Node.js**, **Express**, y **Sequelize**. Esta API gestiona productos, categorías y usuarios, permitiendo operaciones típicas de una tienda online.
 
-## Introducción
+---
 
-En el proyecto de backend se combinará los conocimientos adquiridos en las
-tecnologías node + express, además de mysql/sequelize.
-El alumno tendrá que hacer la presentación y defensa de un diagrama
-explicando las relaciones entre las tablas. El proyecto consistirá en una tienda online(e-commerce)
+## 🚀 Tecnologías
 
+- Node.js
+- Express
+- Sequelize
+- MySQL
 
+---
 
-## Descripción
+## ⚙️ Instalación y configuración
 
-Una vez analizadas las necesidades del proyecto, se espera
-que el alumno desarrolle una API REST que sea capaz de lo siguiente:
-● Registro de usuarios usando Bcrypt.
-● Login de usuarios + token + middleware.
-● Que sea capaz de crear un CRUD.
-● Al menos una relación Many to Many y otra One to Many.
-● Utilización de seeders
+1. **Clona el repositorio:**
 
-Requisitos imprescindibles del proyecto:
-● Uso de ramas con git, cuando se termine el proyecto deberán quedar dos ramas la master o main y la develop.
-● Presentación de README excelente.
+   ```bash
+   git clone https://github.com/iata-lab/Backend-ecommerce-api.git
+   cd Backend-ecommerce-api
+   ```
 
+2. **Instala las dependencias:**
 
-## Tecnologías
+   ```bash
+   npm install
+   npm install sequelize-cli -g
+   ```
 
+3. **Configura la base de datos:**
 
-Para el desarrollo de la API utilizaremos mysql con Sequelize y express.
-El proyecto se subirá a un repositorio público de GitHub y se valorará la
-existencia de ramas, así como diversos commits de calidad legible alta para
-analizar la evolución del proyecto.
-Será requisito indispensable que el repositorio disponga de un Readme
-completo.
+   Asegúrate de tener MySQL corriendo y edita `config/config.js` con tus credenciales.
 
+4. **Crea la base de datos:**
 
-### 1.1.Endpoints
+   ```bash
+   sequelize db:create
+   ```
 
+5. **Ejecuta las migraciones:**
 
-  Productos
-CRUD productos
-Endpoint para crear un producto
-Endpoint para actualizar un producto
-Endpoint para eliminar un producto
-El endpoint de traer productos debe mostrarse junto a la categoría o categorías que pertenece
-Endpoint que traiga un producto por su id
-Filtro para buscar producto por nombre
-Filtro para buscar producto por precio
-Filtro que ordene los productos de mayor a menor precio
-Implementa validación a la hora de crear un producto para que se rellene todos los campos y si no se hace que devuelva un mensaje
-Solo podrás crear, actualizar y eliminar productos si estás autenticado.
+   ```bash
+   sequelize db:migrate
+   ```
 
-  Categorías
-CRUD Categorías
-El endpoint para ver todas las categorías junto a los productos que tienen
-Crea un endpoint que devuelva una categoría por id
-Filtro para buscar categoría por nombre
+6. **Ejecuta los seeders (datos de prueba):**
 
-  Pedidos
-Crea un endpoint para ver los pedidos junto a los productos que tienen 
-Crea un endpoint para crear pedidos
+   ```bash
+   sequelize db:seed:all
+   ```
 
- Usuarios
-Endpoint para registrar un usuario utilizando bcrypt
-Endpoint para login(utilizando bcrypt +JWT)
-Endpoint que nos traiga la información del usuario conectado junto a los pedidos que tiene y los productos que contiene cada pedido
-Endpoint para el logout
-Implementa validación a la hora de crear un usuario para que se rellene todos los campos y si no se hace que devuelva un mensaje
+---
 
- Seeders
-Crea 5 productos con un seeder
+## Endpoints disponibles
 
+### Productos
 
-### 1.2. Extra	
+- `GET /products?price=&minPrice=&maxPrice=&name=`  
+  Lista todos los productos y sus categorías filtrando por precio y nombre.
 
-Implementación de roles:
-Crear un rol Admin y que solo los usuarios con ese rol puedan crear, actualizar y eliminar productos.
-Investiga que es el middleware multer e implementalo para poder adjuntar imágenes al crear o actualizar productos.
-Reviews
-CRUD reviews
-El endpoint de traer reviews debe mostrarlas junto al usuario que hizo esa review
-Actualizar el endpoint de traer todos productos y que ahora muestre los productos junto a sus categorías y sus reviews
-Actualizar el endpoint de traer producto por id y que ahora muestre los productos junto a sus categorías y sus reviews
+- `GET /products/:id`  
+  Obtiene los detalles de un producto específico y sus categorías.
 
+- `POST /products`  
+  Crea un nuevo producto.
 
+- `PUT /products/:id`  
+  Actualiza un producto existente.
+
+- `DELETE /products/:id`  
+  Elimina un producto.
+
+---
+
+### Categorías
+
+- `GET /categories`  
+  Lista todas las categorías y los productos que pertenecen a éstas.
+
+- `GET /categories/:id`  
+  Lista los detalles de una categoría.
+
+- `POST /categories`  
+  Crea una nueva categoría.
+
+- `PUT /categories/:id`  
+  Actualiza una categoría.
+
+- `DELETE /categories/:id`  
+  Elimina una categoría.
+
+---
+
+## Autores
+
+- [@ame3310](https://github.com/ame3310)
+- [@MrCamoga](https://github.com/MrCamoga)
