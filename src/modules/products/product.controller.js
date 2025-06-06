@@ -79,7 +79,7 @@ exports.getById = async (req, res, next) => {
     });
     if (!product) {
       throw new NotFoundError("errors.product.not_found", {
-        details: { product_id: id },
+        details: { productId: id },
       });
     }
 

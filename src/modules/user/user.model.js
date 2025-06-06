@@ -191,11 +191,8 @@ module.exports = (sequelize) => {
 
   User.associate = (models) => {
     User.hasMany(models.Order, {
-      foreignKey: { name: "user_id", allowNull: false },
+      foreignKey: { name: "userId", allowNull: false },
     });
-    /*User.hasMany(models.RefreshToken, {
-      foreignKey: "userId",
-    });*/
   };
 
   console.log("Tipo de User:", typeof User);

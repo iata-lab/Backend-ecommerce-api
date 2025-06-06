@@ -8,7 +8,7 @@ exports.requireOwnershipOrAdmin = async (req, res, next) => {
       throw new NotFoundError("errors.http.not_found");
     }
 
-    const isOwner = product.user_id === req.user.id;
+    const isOwner = product.userId === req.user.id;
     const isAdmin = req.user.role === "admin";
 
     if (!isOwner && !isAdmin) {

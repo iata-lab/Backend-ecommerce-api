@@ -10,7 +10,7 @@ module.exports = (sequelize) => {
         autoIncrement: true,
         allowNull: false,
       },
-      order_id: {
+      orderId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
@@ -18,7 +18,7 @@ module.exports = (sequelize) => {
           key: "id",
         },
       },
-      product_id: {
+      productId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
@@ -53,18 +53,18 @@ module.exports = (sequelize) => {
       paranoid: true,
       underscored: true,
       indexes: [
-        { fields: ["order_id"] },
-        { fields: ["product_id"] },
+        { fields: ["orderId"] },
+        { fields: ["productId"] },
         {
           unique: true,
-          fields: ["order_id", "product_id"],
+          fields: ["orderId", "productId"],
         },
       ],
       hooks: {
         beforeSave: async (orderProduct) => {
           if (!orderProduct.unitPrice) {
             const product = await sequelize.models.Product.findByPk(
-              orderProduct.product_id
+              orderProduct.productId
             );
             if (!product || !product.price) {
               throw new Error("errors.order.missing_product_price");
@@ -78,13 +78,13 @@ module.exports = (sequelize) => {
 
   OrderProduct.associate = (models) => {
     OrderProduct.belongsTo(models.Order, {
-      foreignKey: "order_id",
+      foreignKey: "orderId",
       as: "order",
       onDelete: "CASCADE",
     });
 
     OrderProduct.belongsTo(models.Product, {
-      foreignKey: "product_id",
+      foreignKey: "productId",
       as: "product",
       onDelete: "RESTRICT",
     });
