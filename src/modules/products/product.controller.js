@@ -3,6 +3,9 @@ const {
   sequelize,
 } = require("sequelize");
 
+const multer = require("multer");
+const path = require("path");
+
 const { Product } = require("../products/product.model");
 const { Category } = require("../categories/category.model");
 
@@ -76,7 +79,7 @@ exports.getById = async (req, res, next) => {
     });
     if (!product) {
       throw new NotFoundError("errors.product.not_found", {
-        details: { productId: id },
+        details: { product_id: id },
       });
     }
 
@@ -115,6 +118,14 @@ exports.create = async (req, res, next) => {
 
     await transaction.commit();
 
+     filename: (req, file, cb) => {
+
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+
+
+    const upload = multer({ storage: storage });
+
     res.status(201).json({
       success: true,
       message: req.__("product.created"),
@@ -144,7 +155,7 @@ exports.updateById = async (req, res, next) => {
     res.json({
       success: true,
       message: req.__("product.updated"),
-      data: product, // opcional: devolver producto actualizado
+      data: product,
     });
   } catch (error) {
     await transaction.rollback();

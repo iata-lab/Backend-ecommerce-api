@@ -3,7 +3,7 @@
     "username": "root",
     "password": "Bootcamp777!",
     "port": 3306,
-    "database": "backendProject", 
+    "database": "testbootcamp",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
@@ -19,7 +19,7 @@
     "username": "root",
     "password": "Bootcamp777!",
     "port": 3306,
-    "database": "backendProject", 
+    "database": "backendProject",
     "host": "127.0.0.1",
     "dialect": "mysql"
   }

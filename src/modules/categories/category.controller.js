@@ -1,9 +1,5 @@
 const { Category } = require("../../config/db.config").models;
-const {
-  NotFoundError,
-  BadRequestError,
-  ConflictError,
-} = require("../../errors");
+const { NotFoundError, ConflictError } = require("../../errors");
 
 exports.getAllCategories = async (req, res, next) => {
   try {

@@ -191,7 +191,7 @@ module.exports = (sequelize) => {
 
   User.associate = (models) => {
     User.hasMany(models.Order, {
-      foreignKey: { name: "userId", allowNull: false },
+      foreignKey: { name: "user_id", allowNull: false },
     });
     /*User.hasMany(models.RefreshToken, {
       foreignKey: "userId",

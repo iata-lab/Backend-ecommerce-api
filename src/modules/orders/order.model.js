@@ -28,7 +28,7 @@ module.exports = (sequelize) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      userId: {
+      user_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: { model: "Users", key: "id" },
@@ -77,9 +77,9 @@ module.exports = (sequelize) => {
     {
       timestamps: true,
       paranoid: true,
-      underscored: true,
+      underscored: false,
       indexes: [
-        { fields: ["userId"] },
+        { fields: ["user_id"] },
         { fields: ["status"] },
         { fields: ["createdAt"] },
       ],
@@ -88,11 +88,11 @@ module.exports = (sequelize) => {
 
   Order.associate = (models) => {
     Order.belongsTo(models.User, {
-      foreignKey: "userId",
+      foreignKey: "user_id",
       onDelete: "RESTRICT",
     });
     Order.hasMany(models.OrderProduct, {
-      foreignKey: "orderId",
+      foreignKey: "order_id",
       as: "items",
     });
     Order.belongsToMany(models.Product, {

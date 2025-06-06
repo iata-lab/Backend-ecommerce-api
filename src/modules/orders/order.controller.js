@@ -59,7 +59,7 @@ exports.getOrderById = async (req, res, next) => {
     });
     if (!order) {
       throw new NotFoundError("errors.order.not_found", {
-        details: { orderId: req.params.id },
+        details: { order_id: req.params.id },
       });
     }
 
@@ -110,7 +110,7 @@ exports.getUserOrderById = async (req, res, next) => {
 
     if (!order) {
       throw new NotFoundError("errors.order.not_found", {
-        details: { orderId: req.params.id },
+        details: { order_id: req.params.id },
       });
     }
 
