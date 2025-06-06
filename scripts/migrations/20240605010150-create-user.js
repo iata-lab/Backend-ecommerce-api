@@ -43,6 +43,22 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: true,
       },
+      loginAttempts: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
+      },
+      lockedUntil: {
+        type: Sequelize.DATE,
+        allowNull: true,
+      },
+      lastLogin: {
+        type: Sequelize.DATE,
+        allowNull: true,
+      },
+      deletedAt: {
+        type: Sequelize.DATE,
+        allowNull: true,
+      },
       createdAt: Sequelize.DATE,
       updatedAt: Sequelize.DATE,
     });

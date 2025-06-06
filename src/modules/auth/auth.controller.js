@@ -1,5 +1,9 @@
-const User = require("../users/user.model");
-const { bcrypt } = require("../../config/dependencies");
+const { sequelize } = require("../../config/db.config");
+const User = sequelize.models.User;
+console.log("User keys en auth.controller:", Object.keys(User));
+
+const { Op } = require("sequelize");
+const bcrypt = require("bcryptjs");
 const {
   UnauthorizedError,
   BadRequestError,
@@ -33,9 +37,15 @@ exports.login = async (req, res, next) => {
   try {
     const { credential, password } = req.body;
 
-    const user = await User.scope({
-      method: ["byCredential", credential],
-    }).findOne();
+    const user = await User.scope("withPassword").findOne({
+      where: {
+        [Op.or]: [{ userName: credential }, { email: credential }],
+        isActive: true,
+      },
+    });
+
+    console.log("Usuario recuperado para login:", user?.toJSON());
+
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new UnauthorizedError("errors.auth.invalid_credentials");
@@ -53,20 +63,28 @@ exports.login = async (req, res, next) => {
       refreshToken,
     });
   } catch (error) {
+    console.error("LOGIN ERROR: ", error);
     next(error);
   }
 };
 
 exports.logout = async (req, res, next) => {
+  console.log("Entrando a logout");
   try {
-    const { userId } = req.user;
+    const { id } = req.user;
 
-    const user = await User.findByPk(userId);
+    console.log("User ID from token:", id);
+    console.log("Model User keys:", Object.keys(User));
+    console.log("Buscando usuario con ID:", id);
+
+    const user = await User.findByPk(id);
+    console.log("Resultado de findByPk:", user);
+
     if (!user) {
       throw new UnauthorizedError("errors.auth.invalid_session");
     }
 
-    await user.update({ refreshToken: null });
+    await User.update({ refreshToken: null }, { where: { id: req.user.id } });
 
     res.json({
       success: true,

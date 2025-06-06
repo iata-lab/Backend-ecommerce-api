@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const { sequelize } = require("../../config/db.config");
+const { User } = sequelize.models;
 const controller = require("./user.controller");
 console.log("controller.getProfile:", controller.getProfile);
 console.log("typeof controller.getProfile:", typeof controller.getProfile);
@@ -31,6 +33,17 @@ router.delete(
 );
 
 // Solo adminis
-router.get("/users", authenticate, requireAdmin, controller.getAllUsers);
+//router.get("/users", authenticate, requireAdmin, controller.getAllUsers);
+router.get("/users", authenticate, requireAdmin, async (req, res, next) => {
+  try {
+    const users = await User.scope("safeAttributes").findAll({
+      order: [["createdAt", "DESC"]],
+    });
+    res.json({ success: true, data: users });
+  } catch (error) {
+    console.error("Error en controlador getAllUsers:", error);
+    next(error);
+  }
+});
 
 module.exports = router;

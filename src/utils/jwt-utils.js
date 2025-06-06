@@ -1,14 +1,13 @@
 const jwt = require("jsonwebtoken");
-const User = require("../modules/users/user.model");
 const {
   JWT_SECRET,
   JWT_EXPIRES_IN,
   REFRESH_SECRET,
   REFRESH_EXPIRES_IN,
 } = require("../config/jwt.config");
-const { InternalServerError, UnauthorizedError } = require("../errors");
+const { UnauthorizedError } = require("../errors");
 
-async function generateTokens(user) {
+function generateTokens(user) {
   const payload = {
     id: user.id,
     userName: user.userName,
@@ -22,14 +21,6 @@ async function generateTokens(user) {
   const refreshToken = jwt.sign({ userId: user.id }, REFRESH_SECRET, {
     expiresIn: REFRESH_EXPIRES_IN,
   });
-
-  try {
-    await User.update({ refreshToken }, { where: { id: user.id } });
-  } catch (err) {
-    throw new InternalServerError("errors.token.invalidation_failed", {
-      details: err,
-    });
-  }
 
   return { accessToken, refreshToken };
 }

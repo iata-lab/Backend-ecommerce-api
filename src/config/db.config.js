@@ -1,3 +1,4 @@
+require("dotenv").config();
 const { Sequelize } = require("sequelize");
 const { DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_DIALECT } =
   process.env;
@@ -14,7 +15,7 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
 });
 
 const models = {
-  User: require("../modules/users/user.model")(sequelize),
+  User: require("../modules/user/user.model")(sequelize),
   Product: require("../modules/products/product.model")(sequelize),
   Order: require("../modules/orders/order.model")(sequelize),
   OrderProduct: require("../modules/orders/orderProduct.model")(sequelize),

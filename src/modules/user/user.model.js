@@ -1,11 +1,22 @@
+console.log("👀 user.model.js cargado");
 const { DataTypes, Model } = require("sequelize");
 const {
   validatePasswordStrength,
   hashPassword,
 } = require("../../utils/passwordUtils");
 const ValidationError = require("../../errors");
-const Op = require("sequelize");
-const bcrypt = require("../../config/dependencies");
+const { Op } = require("sequelize");
+const bcrypt = require("bcryptjs");
+const SAFE_USER_ATTRIBUTES = [
+  "id",
+  "userName",
+  "email",
+  "isActive",
+  "emailVerified",
+  "role",
+  "createdAt",
+  "updatedAt",
+];
 
 module.exports = (sequelize) => {
   const User = sequelize.define(
@@ -32,16 +43,19 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
         set(value) {
-          try {
-            validatePasswordStrength(value);
-            this.setDataValue("password", hashPassword(value));
-          } catch (error) {
-            throw new ValidationError(
-              error.translationKey || "errors.validation.password",
-              {
-                details: error.details || { value },
-              }
-            );
+          if (value && value.startsWith("$2b$")) {
+            this.setDataValue("password", value);
+          } else {
+            try {
+              validatePasswordStrength(value);
+              const hashed = bcrypt.hashSync(value, 10); // ✅ Sincrónico y confiable
+              this.setDataValue("password", hashed);
+            } catch (error) {
+              throw new ValidationError(
+                error.translationKey || "errors.validation.password",
+                { details: error.details || { value } }
+              );
+            }
           }
         },
         validate: {
@@ -124,12 +138,15 @@ module.exports = (sequelize) => {
           },
         },
         withPassword: {
-          attributes: { include: ["password"] },
+          attributes: { include: ["password"], exclude: [] },
         },
         active: {
           where: {
             isActive: true,
           },
+        },
+        safeAttributes: {
+          attributes: SAFE_USER_ATTRIBUTES,
         },
       },
       indexes: [
@@ -180,6 +197,9 @@ module.exports = (sequelize) => {
       foreignKey: "userId",
     });*/
   };
+
+  console.log("Tipo de User:", typeof User);
+  console.log("Métodos en User:", Object.keys(User));
 
   return User;
 };

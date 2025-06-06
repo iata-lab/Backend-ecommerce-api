@@ -77,10 +77,10 @@ exports.updateProfile = async (req, res, next) => {
       updates.password = await bcrypt.hash(updates.password, 10);
       updates.lastPasswordChange = new Date();
     }
+    console.log("🛠 Campos a actualizar:", updates);
 
     await user.update(updates, {
       transaction,
-      fields: ALLOWED_UPDATES,
       validate: true,
     });
 
@@ -116,7 +116,6 @@ exports.deleteProfile = async (req, res, next) => {
     }
 
     await user.destroy({ transaction });
-    await user.update({ refreshToken: null }, { transaction });
 
     await transaction.commit();
 
@@ -126,6 +125,7 @@ exports.deleteProfile = async (req, res, next) => {
     });
   } catch (error) {
     await transaction.rollback();
+    console.error("Error en deleteProfile:", error);
     next(error);
   }
 };
@@ -136,21 +136,16 @@ exports.getAllUsers = async (req, res, next) => {
       throw new ForbiddenError("errors.auth.admin_required");
     }
 
-    const users = await User.findAll({
-      attributes: SAFE_USER_ATTRIBUTES,
+    const users = await User.scope("safeAttributes").findAll({
       order: [["createdAt", "DESC"]],
     });
-
-    /*logger.info(`Admin ${req.user.id} accessed user list`, {
-      action: "user_list_access",
-      userId: req.user.id,
-    });*/
 
     res.json({
       success: true,
       data: users,
     });
   } catch (error) {
+    console.error("Error en getAllUsers:", error);
     next(error);
   }
 };

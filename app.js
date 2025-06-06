@@ -1,5 +1,7 @@
 /*const { morgan } = require("./src/config/dependencies");*/
+require("dotenv").config();
 const express = require("express");
+
 const cors = require("cors");
 /*const cookieParser = require("cookie-parser");*/
 const errorHandler = require("./src/middlewares/errorHandler.middleware");

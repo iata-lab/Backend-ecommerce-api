@@ -1,7 +1,7 @@
 const Joi = require("joi");
 
 const updateUserSchema = Joi.object({
-  username: Joi.string().alphanum().min(3).max(50).messages({
+  userName: Joi.string().alphanum().min(3).max(50).messages({
     "string.base": "errors.validation.username_format",
     "string.alphanum": "errors.validation.username_format",
     "string.min": "errors.validation.username_length",

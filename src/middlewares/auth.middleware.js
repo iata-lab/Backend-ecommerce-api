@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const { ForbiddenError, UnauthorizedError } = require("../errors/index.js");
 
 exports.authenticate = async (req, res, next) => {
+  console.log("Ejecutando authenticate");
   try {
     const authHeader = req.headers.authorization;
 
@@ -11,6 +12,7 @@ exports.authenticate = async (req, res, next) => {
     }
 
     const token = authHeader.split(" ")[1];
+    console.log("Token recibido para verificar:", token);
     const decoded = jwt.verify(token, secret);
 
     if (!decoded.session) {
@@ -18,9 +20,9 @@ exports.authenticate = async (req, res, next) => {
     }
 
     req.user = {
-      id: decoded.id,
-      userName: decoded.userName,
-      role: decoded.role,
+      id: decoded.session.id,
+      userName: decoded.session.userName,
+      role: decoded.session.role,
       isAdmin() {
         return (
           typeof this.role === "string" && this.role.toLowerCase() === "admin"
